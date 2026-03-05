@@ -1,0 +1,269 @@
+// ===== Container =====
+.property-container {
+    padding: 24px;
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+// ===== Header Section =====
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        h2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.35rem;
+
+            .header-icon {
+                color: #3f51b5;
+                font-size: 1.5rem;
+                height: 1.5rem;
+                width: 1.5rem;
+            }
+        }
+
+        .record-count {
+            background: #e8eaf6;
+            color: #3f51b5;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+    }
+
+    button {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 6px 18px;
+    }
+}
+
+// ===== Add Property Form Card =====
+.form-card {
+    background: #ffffff;
+    border-radius: 16px !important;
+    box-shadow: 0 6px 24px rgba(63, 81, 181, 0.1) !important;
+    margin-bottom: 24px;
+    padding: 0 !important;
+    border: 1px solid #e8eaf6;
+    overflow: hidden;
+
+    .form-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+        padding: 14px 20px;
+
+        &.transfer-header {
+            background: linear-gradient(135deg, #00897b 0%, #26a69a 100%);
+        }
+
+        &.price-header {
+            background: linear-gradient(135deg, #e64a19 0%, #ff7043 100%);
+        }
+
+        .form-card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+
+            mat-icon {
+                font-size: 1.3rem;
+                height: 1.3rem;
+                width: 1.3rem;
+            }
+        }
+
+        .close-btn {
+            color: rgba(255, 255, 255, 0.85);
+            transition: color 0.2s;
+
+            &:hover {
+                color: #ffffff;
+            }
+        }
+    }
+
+    .property-form {
+        padding: 22px 20px 18px;
+    }
+}
+
+// ===== Form Layout =====
+.form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+
+    .form-field {
+        flex: 1;
+        min-width: 220px;
+
+        &.currency-field {
+            flex: 0 0 160px;
+            min-width: 140px;
+        }
+    }
+}
+
+// ===== Form Actions =====
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f2f5;
+
+    button {
+        min-width: 130px;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-spinner {
+        display: inline-block;
+    }
+}
+
+// ===== Search Box =====
+.search-box {
+    width: 340px;
+    margin-bottom: 20px;
+}
+
+// ===== Table Card =====
+// ===== Table Card =====
+.table-card {
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    table {
+        width: 100%;
+    }
+}
+
+// ===== Table Styling =====
+table {
+    width: 100%;
+}
+
+.mat-mdc-header-row {
+    background-color: #f1f3f6;
+}
+
+.mat-mdc-header-cell {
+    font-weight: 600;
+    font-size: 13px;
+    color: #34495e;
+    letter-spacing: 0.01em;
+}
+
+.mat-mdc-row {
+    transition: background 0.15s ease-in-out;
+}
+
+.mat-mdc-row:hover {
+    background-color: #f0f4ff;
+}
+
+.mat-mdc-cell {
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+// ===== Actions Cell =====
+.actions-cell {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+button[mat-icon-button] {
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: scale(1.12);
+    }
+}
+
+// ===== Empty State =====
+.no-data {
+    text-align: center;
+    color: #aab0bb;
+    padding: 28px 0;
+    font-style: italic;
+}
+
+// ===== Paginator =====
+mat-paginator {
+    border-top: 1px solid #eee;
+}
+
+// ===== Snackbar Global Overrides =====
+::ng-deep .snack-success .mdc-snackbar__surface {
+    background: #2e7d32 !important;
+}
+
+::ng-deep .snack-error .mdc-snackbar__surface {
+    background: #c62828 !important;
+}
+
+// ===== Responsive =====
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+
+        .form-field,
+        .form-field.currency-field {
+            flex: unset;
+            width: 100%;
+        }
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+
+        button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    table {
+        font-size: 12px;
+    }
+}

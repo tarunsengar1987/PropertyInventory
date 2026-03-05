@@ -1,0 +1,206 @@
+<div class="property-container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <h2><mat-icon class="header-icon">home_work</mat-icon> Property Management</h2>
+      <span class="record-count">{{ dataSource.data.length }} properties</span>
+    </div>
+    <button mat-raised-button color="primary" (click)="openAddPanel()" *ngIf="!panelMode"
+      matTooltip="Add a new property">
+      <mat-icon>add</mat-icon> Add Property
+    </button>
+  </div>
+
+  <!-- ══ ADD / EDIT PROPERTY PANEL ══ -->
+  <mat-card class="form-card" *ngIf="panelMode === 'add' || panelMode === 'edit'">
+    <div class="form-card-header">
+      <div class="form-card-title">
+        <mat-icon>{{ panelMode === 'edit' ? 'edit' : 'domain_add' }}</mat-icon>
+        <span>{{ panelMode === 'edit' ? 'Edit Property' : 'Add New Property' }}</span>
+      </div>
+      <button mat-icon-button (click)="closePanel()" class="close-btn"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <form [formGroup]="propertyForm" (ngSubmit)="submitPropertyForm()" class="property-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Property Name</mat-label>
+          <mat-icon matPrefix>apartment</mat-icon>
+          <input matInput formControlName="name" placeholder="e.g. Penthouse Suite A" />
+          <mat-error *ngIf="propertyForm.get('name')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Address</mat-label>
+          <mat-icon matPrefix>location_on</mat-icon>
+          <input matInput formControlName="address" placeholder="e.g. 12 Palm Avenue, Valletta" />
+          <mat-error *ngIf="propertyForm.get('address')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Current Price</mat-label>
+          <mat-icon matPrefix>payments</mat-icon>
+          <input matInput type="number" formControlName="currentPrice" placeholder="e.g. 250000" min="0" />
+          <mat-error *ngIf="propertyForm.get('currentPrice')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field currency-field">
+          <mat-label>Currency</mat-label>
+          <mat-icon matPrefix>currency_exchange</mat-icon>
+          <mat-select formControlName="currency">
+            <mat-option *ngFor="let c of currencies" [value]="c">{{ c }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field" *ngIf="panelMode === 'add'">
+          <mat-label>Date of Registration</mat-label>
+          <mat-icon matPrefix>event</mat-icon>
+          <input matInput [matDatepicker]="picker" formControlName="dateOfRegistration" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="form-actions">
+        <button mat-stroked-button type="button" (click)="closePanel()"
+          [disabled]="isSubmitting"><mat-icon>cancel</mat-icon> Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="propertyForm.invalid || isSubmitting">
+          <mat-spinner *ngIf="isSubmitting" diameter="16" class="btn-spinner"></mat-spinner>
+          <mat-icon *ngIf="!isSubmitting">save</mat-icon>
+          {{ isSubmitting ? 'Saving…' : (panelMode === 'edit' ? 'Save Changes' : 'Save Property') }}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+  <!-- ══ TRANSFER OWNERSHIP PANEL ══ -->
+  <mat-card class="form-card transfer-card" *ngIf="panelMode === 'transfer'">
+    <div class="form-card-header transfer-header">
+      <div class="form-card-title">
+        <mat-icon>swap_horiz</mat-icon>
+        <span>Transfer Ownership — {{ selectedProperty?.name }}</span>
+      </div>
+      <button mat-icon-button (click)="closePanel()" class="close-btn"><mat-icon>close</mat-icon></button>
+    </div>
+    <form [formGroup]="transferForm" (ngSubmit)="submitTransfer()" class="property-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>New Owner</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-select formControlName="contactId">
+            <mat-option *ngFor="let c of contacts" [value]="c.id">{{ c.firstName }} {{ c.lastName }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="transferForm.get('contactId')?.hasError('required')">Select a contact</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Acquisition Price</mat-label>
+          <mat-icon matPrefix>payments</mat-icon>
+          <input matInput type="number" formControlName="acquisitionPrice" min="0" placeholder="e.g. 120000" />
+          <mat-error *ngIf="transferForm.get('acquisitionPrice')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field currency-field">
+          <mat-label>Currency</mat-label>
+          <mat-select formControlName="currency">
+            <mat-option *ngFor="let c of currencies" [value]="c">{{ c }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-actions">
+        <button mat-stroked-button type="button" (click)="closePanel()"><mat-icon>cancel</mat-icon> Cancel</button>
+        <button mat-raised-button color="accent" type="submit" [disabled]="transferForm.invalid || isSubmitting">
+          <mat-spinner *ngIf="isSubmitting" diameter="16" class="btn-spinner"></mat-spinner>
+          <mat-icon *ngIf="!isSubmitting">swap_horiz</mat-icon>
+          {{ isSubmitting ? 'Transferring…' : 'Transfer Ownership' }}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+  <!-- ══ UPDATE PRICE PANEL ══ -->
+  <mat-card class="form-card price-card" *ngIf="panelMode === 'updatePrice'">
+    <div class="form-card-header price-header">
+      <div class="form-card-title">
+        <mat-icon>attach_money</mat-icon>
+        <span>Update Price — {{ selectedProperty?.name }}</span>
+      </div>
+      <button mat-icon-button (click)="closePanel()" class="close-btn"><mat-icon>close</mat-icon></button>
+    </div>
+    <form [formGroup]="priceForm" (ngSubmit)="submitPriceUpdate()" class="property-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>New Price</mat-label>
+          <mat-icon matPrefix>payments</mat-icon>
+          <input matInput type="number" formControlName="newPrice" min="0" placeholder="e.g. 260000" />
+          <mat-error *ngIf="priceForm.get('newPrice')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field currency-field">
+          <mat-label>Currency</mat-label>
+          <mat-select formControlName="currency">
+            <mat-option *ngFor="let c of currencies" [value]="c">{{ c }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-actions">
+        <button mat-stroked-button type="button" (click)="closePanel()"><mat-icon>cancel</mat-icon> Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="priceForm.invalid || isSubmitting">
+          <mat-spinner *ngIf="isSubmitting" diameter="16" class="btn-spinner"></mat-spinner>
+          <mat-icon *ngIf="!isSubmitting">save</mat-icon>
+          {{ isSubmitting ? 'Saving…' : 'Update Price' }}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+  <!-- SEARCH -->
+  <mat-form-field appearance="outline" class="search-box">
+    <mat-label>Search properties</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Name, address…" />
+  </mat-form-field>
+
+  <!-- TABLE -->
+  <mat-card class="table-card">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Property Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef>Address</th>
+        <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="currentPrice">
+        <th mat-header-cell *matHeaderCellDef>Current Price</th>
+        <td mat-cell *matCellDef="let element">{{ element.currentPrice | currency }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateOfRegistration">
+        <th mat-header-cell *matHeaderCellDef>Registered On</th>
+        <td mat-cell *matCellDef="let element">{{ element.dateOfRegistration | date:'mediumDate' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element" class="actions-cell">
+          <button mat-icon-button color="primary" (click)="openEditPanel(element)"
+            matTooltip="Edit property"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button color="warn" (click)="deleteProperty(element)"
+            matTooltip="Delete property"><mat-icon>delete</mat-icon></button>
+          <button mat-icon-button color="accent" (click)="openTransferPanel(element)"
+            matTooltip="Transfer ownership"><mat-icon>swap_horiz</mat-icon></button>
+          <button mat-icon-button color="primary" (click)="openPricePanel(element)"
+            matTooltip="Update price"><mat-icon>attach_money</mat-icon></button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-data" colspan="5">No properties found.</td>
+      </tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+  </mat-card>
+
+</div>

@@ -1,0 +1,146 @@
+// ===== Container =====
+.contacts-container {
+    padding: 24px;
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+// ===== Header Section =====
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        h2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.35rem;
+
+            .header-icon {
+                color: #3f51b5;
+                font-size: 1.5rem;
+                height: 1.5rem;
+                width: 1.5rem;
+            }
+        }
+
+        .record-count {
+            background: #e8eaf6;
+            color: #3f51b5;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+    }
+
+    button {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 6px 18px;
+    }
+}
+
+// ===== Inline Form Card =====
+.form-card {
+    padding: 24px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #3f51b5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+    mat-card-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+}
+
+.contact-form {
+    .form-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 4px;
+
+        mat-form-field {
+            flex: 1;
+        }
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 8px;
+    }
+}
+
+// ===== Search Box =====
+.search-box {
+    width: 340px;
+    margin-bottom: 20px;
+}
+
+// ===== Table Card =====
+.table-card {
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    table {
+        width: 100%;
+    }
+}
+
+.mat-mdc-header-row {
+    background-color: #f1f3f6;
+}
+
+.mat-mdc-header-cell {
+    font-weight: 600;
+    font-size: 14px;
+    color: #34495e;
+}
+
+.mat-mdc-row:hover {
+    background-color: #f9fbfd;
+}
+
+.mat-mdc-cell {
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 4px;
+}
+
+.no-data {
+    text-align: center;
+    padding: 32px;
+    color: #95a5a6;
+    font-style: italic;
+}
+
+// ===== Responsive =====
+@media (max-width: 768px) {
+    .contact-form .form-row {
+        flex-direction: column;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+}

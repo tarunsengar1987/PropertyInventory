@@ -1,0 +1,147 @@
+<div class="dashboard-container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2>
+        <mat-icon class="header-icon">dashboard</mat-icon>
+        Dashboard
+      </h2>
+      <span class="page-subtitle">Overview of your property inventory</span>
+    </div>
+    <button class="refresh-btn" (click)="loadDashboard()" matTooltip="Refresh data">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <!-- LOADING STATE -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <span>Loading dashboard...</span>
+  </div>
+
+  <!-- ERROR STATE -->
+  <div class="error-state" *ngIf="hasError && !isLoading">
+    <mat-icon>error_outline</mat-icon>
+    <span>Failed to load data. Please check the API connection and try again.</span>
+    <button class="retry-btn" (click)="loadDashboard()">Retry</button>
+  </div>
+
+  <ng-container *ngIf="!isLoading && !hasError">
+
+    <!-- SUMMARY STAT CARDS -->
+    <div class="summary-cards">
+
+      <mat-card class="summary-card properties">
+        <div class="card-icon-wrap properties-bg">
+          <mat-icon>home_work</mat-icon>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Total Properties</span>
+          <span class="card-value">{{ totalProperties }}</span>
+          <span class="card-trend">Registered in system</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="summary-card contacts">
+        <div class="card-icon-wrap contacts-bg">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Total Contacts</span>
+          <span class="card-value">{{ totalContacts }}</span>
+          <span class="card-trend">Owners & buyers</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="summary-card sales">
+        <div class="card-icon-wrap sales-bg">
+          <mat-icon>swap_horiz</mat-icon>
+        </div>
+        <div class="card-body">
+          <span class="card-label">Ownership Transfers</span>
+          <span class="card-value">{{ totalSales }}</span>
+          <span class="card-trend">Recorded transactions</span>
+        </div>
+      </mat-card>
+
+    </div>
+
+    <!-- SALES TABLE -->
+    <mat-card class="table-card">
+      <div class="table-header">
+        <div>
+          <h3>
+            <mat-icon class="section-icon">receipt_long</mat-icon>
+            Property Sales History
+          </h3>
+          <span class="table-subtitle">All recorded ownership transfers with acquisition prices</span>
+        </div>
+        <span class="record-badge">{{ totalSales }} records</span>
+      </div>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+
+        <ng-container matColumnDef="propertyName">
+          <th mat-header-cell *matHeaderCellDef>Property</th>
+          <td mat-cell *matCellDef="let e">
+            <div class="property-name-cell">
+              <mat-icon class="row-icon">apartment</mat-icon>
+              {{ e.propertyName }}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="owner">
+          <th mat-header-cell *matHeaderCellDef>Owner</th>
+          <td mat-cell *matCellDef="let e">
+            <div class="owner-cell">
+              <mat-icon class="row-icon">person</mat-icon>
+              {{ e.owner }}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dateOfPurchase">
+          <th mat-header-cell *matHeaderCellDef>Date of Purchase</th>
+          <td mat-cell *matCellDef="let e">{{ e.dateOfPurchase | date:'dd MMM yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="askingPrice">
+          <th mat-header-cell *matHeaderCellDef>Asking Price</th>
+          <td mat-cell *matCellDef="let e" class="price-cell">
+            {{ e.askingPrice | currency:'EUR':'symbol':'1.0-0' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="soldAtEUR">
+          <th mat-header-cell *matHeaderCellDef>Sold At (EUR)</th>
+          <td mat-cell *matCellDef="let e" class="price-cell eur">
+            {{ e.soldAtEUR | currency:'EUR':'symbol':'1.0-0' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="soldAtUSD">
+          <th mat-header-cell *matHeaderCellDef>Sold At (USD)</th>
+          <td mat-cell *matCellDef="let e" class="price-cell usd">
+            {{ e.soldAtUSD | currency:'USD':'symbol':'1.0-0' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell no-data" colspan="6">No sales records found.</td>
+        </tr>
+
+      </table>
+
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons>
+      </mat-paginator>
+
+    </mat-card>
+
+  </ng-container>
+
+</div>
